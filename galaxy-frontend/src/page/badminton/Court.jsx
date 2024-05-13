@@ -4,7 +4,7 @@ import { green, grey } from '@mui/material/colors';
 import SpeekButton from './SpeekButton';
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 
-function Court({ CourtName, players }) {
+function Court({ CourtNumber, players }) {
 
   const speakRef = useRef();
 
@@ -48,7 +48,7 @@ function Court({ CourtName, players }) {
       <Droppable droppableId="drop-id">
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Typography variant="h6" noWrap>Court: {CourtName}</Typography> 
+            <Typography variant="h6" noWrap>Court: {CourtNumber}</Typography> 
             <Box
               alignItems="center"
               justifyContent={"center"}
@@ -65,8 +65,6 @@ function Court({ CourtName, players }) {
                 flexDirection="row"
                 alignItems="center"
                 justifyContent={"center"}
-                fullWidth
-
                 sx={{
                   backgroundColor: green[500],
                 }}
@@ -85,7 +83,6 @@ function Court({ CourtName, players }) {
                 flexDirection="row"
                 alignItems="center"
                 justifyContent={"center"}
-                fullWidth
                 mt={1}
                 sx={{
                   backgroundColor: green[500],

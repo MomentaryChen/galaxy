@@ -17,4 +17,5 @@ import lombok.ToString;
 public class PlayerReq extends BaseRq{
     String name;
     Long teamId;
+    int level;
 }

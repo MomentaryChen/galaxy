@@ -46,11 +46,14 @@ public class Team {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team", fetch = FetchType.LAZY)
     private List<Player> players;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "team", fetch = FetchType.LAZY)
+    private List<Court> courts;
+
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createDate = LocalDateTime.now();;
 
     @LastModifiedDate
     @Column(nullable = false)
-    LocalDateTime updateTime = LocalDateTime.now();
+    LocalDateTime updateDate = LocalDateTime.now();
 }

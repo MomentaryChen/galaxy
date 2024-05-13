@@ -40,7 +40,7 @@ const NavMenu = (props) => {
                         <List>
                             {pages.map((text, index) => (
 
-                                <ListItemButton onClick={navigateHandler}>
+                                <ListItemButton key={text} onClick={navigateHandler}>
                                     <ListItemIcon >
                                         <InboxIcon />
                                     </ListItemIcon>

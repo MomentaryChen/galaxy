@@ -1,5 +1,6 @@
 package com.momentary.galaxy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,9 @@ import com.momentary.galaxy.modal.Greeting;
 @RestController
 public class bamintonController {
 
+    @Autowired
+    LevelController levelController;
+
     @GetMapping("/baminton")
     public String baminton() {
         return "baminton";
@@ -19,8 +23,13 @@ public class bamintonController {
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
-        Thread.sleep(1000); // simulated delay
         System.out.println(message.toString());
         return new Greeting("Hello, " + message.getName() + "!");
     }
+
+    // @MessageMapping("/level")
+    // @SendTo("/topic/Level")
+    // public Greeting getLevel() throws Exception {
+    //     return levelController.getLevels();
+    // }
 }

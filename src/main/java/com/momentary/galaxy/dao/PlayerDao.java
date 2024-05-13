@@ -13,5 +13,6 @@ public interface PlayerDao extends JpaRepository<Player, Long> {
 
     // @Query("SELECT p FROM player p WHERE p.id.team = ?1")
     // List<Player> findByTeam(Team team);
+    
 
 }

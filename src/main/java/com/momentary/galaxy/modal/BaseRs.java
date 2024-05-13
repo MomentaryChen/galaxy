@@ -16,4 +16,6 @@ public class BaseRs implements Serializable {
 
 	protected String msg;
 
+	protected Object data;
+
 }

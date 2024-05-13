@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function BadmintonRegister() {
+export default function BadmintonRegister(props) {
     const [cookies, setCookie, removeCookie] = useCookies(['badminton_id']);
     const classes = useStyles();
     const [textPlayerName, setTextPlayerName] = useState("");
@@ -234,8 +234,8 @@ export default function BadmintonRegister() {
                             onChange={updateFormByName}
                         >
                             {
-                                ['High', 'Medium', 'Low'].map((value) =>
-                                    <MenuItem key={value} value={value}>{value}</MenuItem>
+                                props.levels.map((le) =>
+                                    <MenuItem key={le.level} value={le.level}>{le.name}-{le.level}</MenuItem>
                                 )
                             }
                         </Select>

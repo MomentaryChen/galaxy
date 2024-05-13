@@ -35,35 +35,70 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function BadmintonDashboard() {
-  const [stomp, setStomp] = useState();
-  const [newResponse, setNewResponse] = useState();
-  const [responses, setResponses] = useState([])
-  const [connected, setConnected] = useState(false)
+
+  const initRef = useRef(false);
+  const stomp = useRef(null);
+  const [connected, setConnected] = useState(false);
 
   const [courtCnt, setCourtCnt] = useState(8);
 
-  useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/ws");
-    const stompClient = Stomp.over(socket);
-    stompClient.connect(
-      {},
-      frame => {
-        setConnected(true)
-        stompClient.subscribe("/topic/greetings", (message) => {
-          console.log(JSON.parse(message.body));
-        });
-      },
-      error => {
-        console.log(error);
-      }
-    );
-    window.stomp = stompClient;
-    setStomp(stompClient)
-  }, [])
+  const [levels, setLevels] = useState([]);
 
-  const send = () => {
-    stomp.send('/app/hello', JSON.stringify({ name: "Victor" }), {});
+  const connectSockJS = () => {
+    const socket = new SockJS("http://localhost:8080/ws");
+    stomp.current = Stomp.over(socket);
+    stomp.current.connect(
+      {},
+      connectSockJSCallBack,
+      connectSockJSErrorCallback
+    );
+    window.stomp = stomp.current;
   }
+
+  const connectSockJSCallBack = (frame) => {
+    console.log("CallBack")
+    setConnected(true);
+
+    stomp.current.subscribe("/topic/greetings", (message) => {
+      console.log(message)
+      console.log(JSON.parse(message.body));
+    });
+    stomp.current.subscribe("/topic/levels", (message) => {
+      const res = JSON.parse(message.body);
+      setLevels(res.body.data);
+    });
+
+  }
+
+  const connectSockJSErrorCallback = (error) => {
+    console.log(error);
+    connectSockJS();
+  }
+
+
+  useEffect(() => {
+    if (initRef.current === true) return;
+    if (stomp.current === null || !stomp.current.connected) {
+      connectSockJS();
+      initRef.current = true;
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (stomp.current !== null && stomp.current.connected) {
+      console.log('Geting Levels')
+      // get all levels
+      stomp.current.send('/app/levels', JSON.stringify({}), {});
+    }
+  }, [connected])
+
+  const [testref, settestref] = useState(0);
+  useEffect(() => {
+    console.log('SURE');
+
+  }, [testref]);
+
 
   const [court, setCourt] = useState([null, null, null, null]);
   const [players, setPlayers] = useState(['陳X0', '陳X1', '陳X2', '陳X3', '陳X4', '陳X5', '陳X6', '陳X7']);
@@ -91,7 +126,7 @@ export default function BadmintonDashboard() {
         flexDirection="row"
         alignItems="center"
         justifyContent={"center"}
-        sx={{m: 3}}
+        sx={{ m: 3 }}
       >
         <Court players={players} CourtNumber={CourtNumber} sx={{ margin: 0 }}></Court>
       </Box>
@@ -101,16 +136,16 @@ export default function BadmintonDashboard() {
 
   const renderCourt = () => {
     let courts = [];
+
     for (let i = 0; i < courtCnt; i++) {
       courts.push(
-        <Grid item   xs={12} sm={6} md={4} lg={3}>
+        <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
           {genCourt(players, "A")}
         </Grid>
       )
     }
     return courts;
   }
-
 
   return (
     <React.Fragment>
@@ -132,12 +167,12 @@ export default function BadmintonDashboard() {
           <Typography variant="h3" noWrap>Badminon</Typography>
           <Grid container spacing={2} sx={{ minHeight: '80vh' }} >
             {renderCourt()}
-          </Grid> 
+          </Grid>
 
 
         </DragDropContext >
 
-        <BadmintonRegister></BadmintonRegister>
+        <BadmintonRegister levels={levels}></BadmintonRegister>
       </Container>
     </React.Fragment >
   );

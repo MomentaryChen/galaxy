@@ -6,14 +6,24 @@ import React, { useState } from 'react';
 import MenuAppBar from './MenuAppBar';
 import NavMenu from './NavMenu';
 import AppContext from '../AppContext'
+import UserContext from '../UserContext'
+import GalaxyLogin from '../compoment/GalaxyLogin';
 
 const Layout = ({ children }) => {
     const appContext = React.useContext(AppContext);
-    return (<>
+    const userContext = React.useContext(UserContext);
 
-        <Grid container >
-            <Grid item xs={12} style={{ height: '30px'}}>
-                <MenuAppBar MenuIconClick={() => appContext.setMenuOpen(!appContext.menuOpen)}/>
+    if (userContext.authStatus === 0) {
+        return <>
+            <GalaxyLogin />
+        </>
+    }
+    else if(userContext.authStatus === 1) {
+        return (<>
+
+            <Grid container >
+                <Grid item xs={12} style={{ height: '30px'}}>
+                    <MenuAppBar MenuIconClick={() => appContext.setMenuOpen(!appContext.menuOpen)}/>
             </Grid>
             {appContext.menuOpen ?
                 <Grid item xs={2} style={{  overflow: 'auto', marginTop: '35px' }}>
@@ -29,6 +39,7 @@ const Layout = ({ children }) => {
 
 
     </>)
+    }                 
 }
 
 export default Layout;

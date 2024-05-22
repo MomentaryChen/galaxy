@@ -1,12 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Layout from "./layout/Layout";
 import { Outlet, Router } from "react-router-dom";
 import AppContext from "./AppContext";
+import UserContext from "./UserContext";
 
 const theme = createTheme({
     palette: {
@@ -39,15 +40,28 @@ const theme = createTheme({
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
+
+    /*
+        0: 無登入
+        1: 登入成功
+    */
+    const [authStatus, setAuthStatus] = useState(0);
+
+    useEffect(() => {}, [authStatus]);
+
     return (
         <ThemeProvider theme={theme}>
             <div className="App">
                 <CssBaseline />
-                <AppContext.Provider value={{ menuOpen, setMenuOpen }}>
-                    <Layout>
-                        <Outlet />
-                    </Layout>
-                </AppContext.Provider>
+                <UserContext.Provider value={{ authStatus, setAuthStatus }}>
+                    <AppContext.Provider
+                        value={{ menuOpen, setMenuOpen}}
+                    >
+                        <Layout>
+                            <Outlet />
+                        </Layout>
+                    </AppContext.Provider>
+                </UserContext.Provider>
             </div>
         </ThemeProvider>
     );

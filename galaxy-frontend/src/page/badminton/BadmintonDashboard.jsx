@@ -61,8 +61,8 @@ export default function BadmintonDashboard() {
 
     stomp.current.subscribe("/topic/greetings", (message) => {
       console.log(message)
-      console.log(JSON.parse(message.body));
     });
+    
     stomp.current.subscribe("/topic/levels", (message) => {
       const res = JSON.parse(message.body);
       setLevels(res.body.data);

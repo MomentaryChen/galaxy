@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.momentary.galaxy.enity.Player;
 import com.momentary.galaxy.enity.Team;
 import com.momentary.galaxy.modal.req.TeamReq;
 
@@ -42,7 +40,6 @@ public class TeamController {
     @PostMapping
     public String insertTeam(@RequestBody TeamReq team) {
         try {
-            System.out.println(team.toString());
             teamService.insertTeam(team);
             return String.format("Create %s successfully.", team.toString());
         } catch (Exception e) {

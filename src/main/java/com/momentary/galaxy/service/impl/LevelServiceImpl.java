@@ -22,7 +22,7 @@ public class LevelServiceImpl implements LevelService {
 
     @Override
     public Level getLevel(Integer level) {
-        return levelDao.findById(level).get();
+        return levelDao.findById((Long.valueOf(level))).orElseThrow();
     }
 
 }

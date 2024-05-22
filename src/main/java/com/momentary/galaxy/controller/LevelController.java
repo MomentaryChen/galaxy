@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.momentary.galaxy.constant.HttpRespCode;
 import com.momentary.galaxy.enity.Player;
 import com.momentary.galaxy.modal.BaseRs;
-import com.momentary.galaxy.modal.res.LevelRes;
 import com.momentary.galaxy.modal.res.PlayerRes;
 import com.momentary.galaxy.service.LevelService;
 import com.momentary.galaxy.service.PlayerService;

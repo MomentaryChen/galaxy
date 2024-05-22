@@ -40,7 +40,7 @@ import lombok.ToString;
 public class Court {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NonNull
     @Column

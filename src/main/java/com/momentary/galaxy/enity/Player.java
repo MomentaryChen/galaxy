@@ -32,7 +32,7 @@ import lombok.ToString;
 
 @Entity
 @Data
-@Table
+@Table(name = "player")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,11 +50,11 @@ public class Player {
     private String name;
 
     @NonNull
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="level", nullable = false)
     private Level level;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="team_id", nullable = false)
     @JsonIgnore
     private Team team;

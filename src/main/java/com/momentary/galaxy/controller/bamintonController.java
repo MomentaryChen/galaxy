@@ -3,17 +3,24 @@ package com.momentary.galaxy.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.momentary.galaxy.message.HelloMessage;
 import com.momentary.galaxy.modal.Greeting;
 
+@EnableScheduling
 @RestController
 public class bamintonController {
 
     @Autowired
     LevelController levelController;
+
+    @Autowired
+    private SimpMessagingTemplate template;
 
     @GetMapping("/baminton")
     public String baminton() {
@@ -27,9 +34,15 @@ public class bamintonController {
         return new Greeting("Hello, " + message.getName() + "!");
     }
 
-    // @MessageMapping("/level")
-    // @SendTo("/topic/Level")
-    // public Greeting getLevel() throws Exception {
-    //     return levelController.getLevels();
-    // }
+    // @Scheduled(fixedRate = 5000)
+    public void autoGreeting() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } // simulated delay
+        System.out.println("scheduled");
+        this.template.convertAndSend("/topic/greetings", "Hello");
+        this.template.convertAndSendToUser("admin", "/topic/greetings", "Hello");
+    }
 }

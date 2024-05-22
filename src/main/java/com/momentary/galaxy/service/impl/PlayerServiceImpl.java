@@ -2,6 +2,8 @@ package com.momentary.galaxy.service.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
+    private static final Logger logger = LogManager.getLogger(PlayerServiceImpl.class);
 
     @Autowired
     PlayerDao playerDao;
@@ -43,17 +46,25 @@ public class PlayerServiceImpl implements PlayerService {
     @Transactional
     @Override
     public Player insertPlayer(PlayerReq res) throws Exception {
-        Player player = new Player();
-        player.setName(res.getName());
-        player.setLevel(levelService.getLevel(res.getLevel()));
-        
-        Team team = teamService.getTeamById(res.getTeamId());
+        Player newPlayer = new Player();
 
-        
-        player.setTeam(team);
-        teamService.updateTeam(team);
+        try {
+            logger.info("String to insert player: " + res.toString());
 
-        return playerDao.save(player);
+            newPlayer.setId(101L);
+            newPlayer.setName(res.getName());
+            newPlayer.setLevel(levelService.getLevel(res.getLevel()));
+
+            Team team = teamService.getTeamById(res.getTeamId());
+            newPlayer.setTeam(team);
+            
+            newPlayer = playerDao.save(newPlayer);
+            logger.info("Insert player successfully");
+            return newPlayer;
+        } catch (Exception e) {
+
+            throw e;
+        }
     }
 
 }

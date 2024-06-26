@@ -12,4 +12,5 @@ public class GenTokenResVo {
     private String msg;
     private String token;
     private String loginTime;
+    private UserInfoVO userInfo;
 }

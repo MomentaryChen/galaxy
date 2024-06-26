@@ -61,7 +61,6 @@ public class GalaxyAuthenticationFilter extends OncePerRequestFilter {
             if (request.getHeader(GalaxyConstants.API_HEADER_STRING) != null) {
                 String token = request.getHeader(GalaxyConstants.API_HEADER_STRING);
                 authApiToken(token, request);
-
                 filterChain.doFilter(request, response);
             } else {
                 filterChain.doFilter(request, response);

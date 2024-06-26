@@ -1,5 +1,4 @@
 import * as React from "react";
-import UserContext from "../UserContext";
 import {
     Grid,
     Box,
@@ -19,6 +18,8 @@ import {
 import { red } from "@mui/material/colors";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { makeStyles, useTheme } from "@mui/styles";
+import { execLogin } from "./GalazyLoginApi";
+import UserContext from "../UserContext";
 
 const useStyles = makeStyles((theme) => ({
     cardTitle: {
@@ -35,8 +36,10 @@ const useStyles = makeStyles((theme) => ({
 const GalaxyLogin = () => {
     const classes = useStyles();
 
-    const { username, setUsername } = React.useState("");
-    const { password, setPassword } = React.useState("");
+    const {setAuthStatus, userInfo, setUserInfo, setUserToken} = React.useContext(UserContext);
+
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
 
     const remember = () => {
         return (
@@ -60,6 +63,27 @@ const GalaxyLogin = () => {
         );
     };
 
+    const login = async () => {
+        // Validate
+        if (username === "" || password === "") {
+            return;
+        }
+        console.log(username, password);
+        const data = await execLogin(username, password);
+        console.log(data)
+
+        if(data.token) {
+            setAuthStatus(1);
+            setUserToken(data.token);
+            sessionStorage.setItem("GALAXY_TOKEN", data.token);
+        }
+
+        if(data.userInfo) {
+            sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+            setUserInfo(data.userInfo);
+        }
+    };
+
     const loginButton = () => {
         return (
             <>
@@ -71,7 +95,12 @@ const GalaxyLogin = () => {
                         flexDirection: "column",
                     }}
                 >
-                    <Button variant="contained">登入</Button>
+                    <Button
+                        variant="contained"
+                        onClick={login}
+                    >
+                        登入
+                    </Button>
                 </Box>
             </>
         );
@@ -81,10 +110,10 @@ const GalaxyLogin = () => {
         return (
             <>
                 <Grid container>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Link href="#">忘記密碼</Link>
                     </Grid>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Link href="#">註冊</Link>
                     </Grid>
                 </Grid>
@@ -143,6 +172,9 @@ const GalaxyLogin = () => {
                             margin="normal"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") login();
+                            }}
                             required
                         />
                     </CardContent>

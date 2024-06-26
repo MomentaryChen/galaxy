@@ -6,11 +6,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
-import { page } from '../data/pageData';
+
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
-const pages = Object.values(page).map((p) => p.name);
+
 
 const NavMenu = (props) => {
     const [open, setOpen] = React.useState(true);
@@ -38,7 +38,7 @@ const NavMenu = (props) => {
                     <Toolbar />
                     <Box sx={{ overflow: 'auto' }}>
                         <List>
-                            {pages.map((text, index) => (
+                            {props.pages.map((text, index) => (
 
                                 <ListItemButton key={text} onClick={navigateHandler}>
                                     <ListItemIcon >
@@ -46,8 +46,6 @@ const NavMenu = (props) => {
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
-
-
                             ))}
                             <ListItemButton onClick={handleClick}>
                                 <ListItemIcon>

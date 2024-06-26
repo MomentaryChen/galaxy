@@ -9,7 +9,7 @@ import com.momentary.galaxy.enity.ApiClient;
 import com.momentary.galaxy.enity.Player;
 
 @Repository
-public interface SystemDao extends JpaRepository<ApiClient, Long> {
+public interface SystemDao extends JpaRepository<ApiClient, String> {
 
     /**
      * 查詢介接系統帳號

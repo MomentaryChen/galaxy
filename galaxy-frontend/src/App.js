@@ -7,7 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Layout from "./layout/Layout";
 import { Outlet, Router } from "react-router-dom";
 import AppContext from "./AppContext";
-import UserContext from "./UserContext";
+import UserContext, { _userInfo } from "./UserContext";
 
 const theme = createTheme({
     palette: {
@@ -40,22 +40,43 @@ const theme = createTheme({
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [functionMenuOpen, setFunctionMenuOpen] = useState(false);
 
     /*
         0: 無登入
         1: 登入成功
     */
     const [authStatus, setAuthStatus] = useState(0);
+    const [userInfo, setUserInfo] = useState(_userInfo);
+    const [userToken, setUserToken] = useState(null);
 
-    useEffect(() => {}, [authStatus]);
+    // Auto Login
+    useEffect(() => {
+        const __token = sessionStorage.getItem("GALAXY_TOKEN");
+        if (!__token) {
+            setAuthStatus(0);
+            return;
+        }
+        setAuthStatus(1);
+
+        const __userInfo = sessionStorage.getItem("userInfo");
+        setUserInfo(JSON.parse(__userInfo));
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
             <div className="App">
                 <CssBaseline />
-                <UserContext.Provider value={{ authStatus, setAuthStatus }}>
+                <UserContext.Provider
+                    value={{ authStatus, setAuthStatus, userInfo, setUserInfo, userToken, setUserToken }}
+                >
                     <AppContext.Provider
-                        value={{ menuOpen, setMenuOpen}}
+                        value={{
+                            menuOpen,
+                            setMenuOpen,
+                            functionMenuOpen,
+                            setFunctionMenuOpen,
+                        }}
                     >
                         <Layout>
                             <Outlet />

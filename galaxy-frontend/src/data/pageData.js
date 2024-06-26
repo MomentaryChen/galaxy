@@ -1,26 +1,32 @@
-
-
 export const page = {
-    "cdr": {
-        name: "CDR",
-        path: "/cdr"
+    function: {
+        name: "Function",
+        path: "/function",
+        children: {
+            cdr: {
+                name: "CDR",
+                path: "cdr",
+            },
+            softphone: {
+                name: "Softphone",
+                path: "softphone",
+            },
+            autoComplete: {
+                name: "autoComplete",
+                path: "autoComplete",
+            },
+            DND: {
+                name: "DND",
+                path: "DND",
+            },
+            dialog: {
+              name: "dialog",
+              path: "dialog",
+          },
+        },
     },
-    
-    "softphone": {
-        name: "Softphone",
-        path: "/softphone"
-    },
-    "badminton": {
+    badminton: {
         name: "Badminton",
-        path: "/badminton"
-    },
-    "autoComplete": {
-        name: "autoComplete",
-        path: "/autoComplete"
-    },
-    "DND": {
-        name: "DND",
-        path: "/DND"
-    },
-
-}
+        path: "/badminton",
+    }
+};

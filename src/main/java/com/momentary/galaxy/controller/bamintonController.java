@@ -14,7 +14,7 @@ import com.momentary.galaxy.modal.Greeting;
 
 @EnableScheduling
 @RestController
-public class bamintonController {
+public class BamintonController {
 
     @Autowired
     LevelController levelController;

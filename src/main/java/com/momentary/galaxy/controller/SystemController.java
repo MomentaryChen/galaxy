@@ -1,6 +1,7 @@
 package com.momentary.galaxy.controller;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import com.momentary.galaxy.constant.HttpRespCode;
 import com.momentary.galaxy.modal.ApiToken;
 import com.momentary.galaxy.modal.req.GenTokenReqVO;
 import com.momentary.galaxy.modal.res.GenTokenResVo;
+import com.momentary.galaxy.modal.res.UserInfoVO;
 import com.momentary.galaxy.service.TokenService;
 import com.momentary.galaxy.service.security.GalaxyUserDetails;
 import com.momentary.galaxy.service.security.GalaxyUserDetailsService;
@@ -37,8 +39,8 @@ public class SystemController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("token")
-    public ResponseEntity<GenTokenResVo> genApiToken(@RequestBody GenTokenReqVO req, HttpServletRequest request) {
+    @PostMapping("signIn")
+    public ResponseEntity<GenTokenResVo> onSignIn(@RequestBody GenTokenReqVO req, HttpServletRequest request) {
         logger.info("============ Start SystemController.genApiToken() ============");
         GenTokenResVo res = null;
         try {
@@ -60,11 +62,20 @@ public class SystemController {
                 LocalDateTime.now(), 
                 LocalDateTime.now().plusMinutes(GalaxyConstants.EXPIRATION_TIME));
 
+            // 3. create user info
+            UserInfoVO uInfo = UserInfoVO.builder()
+                .userId( userDetails.getClientId())
+                .userName(userDetails.getUsername())
+                .menu(userDetails.getPermissions())
+                .build();
+
+
             // 
             res = new GenTokenResVo();
             res.setCode(HttpRespCode.Common.SUCCESS.getCode());
             res.setMsg(HttpRespCode.Common.SUCCESS.getMsg());
             res.setToken(token.getAccess());
+            res.setUserInfo(uInfo);
 
         } catch(Exception e) {
             res = new GenTokenResVo();

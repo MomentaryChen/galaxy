@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/ws/**").permitAll()
                         // System
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/common/**").permitAll()
                         // Player
                         .requestMatchers(HttpMethod.GET, "/api/player/**").hasAuthority("USER")
 

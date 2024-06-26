@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import AudioPlayer from 'react-audio-player';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Paper } from '@mui/material';
 import axios from 'axios';
 
 import TextField from '@mui/material/TextField';
@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import { styled } from '@mui/material/styles';
 
 
 const CosAutoComplete = (props) => {
@@ -24,16 +25,26 @@ const CosAutoComplete = (props) => {
             setAutoList([]);
     }
 
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+      }));
+
     return (
         <>
             <Box
-                display='flex'
+                // display='flex'
                 alignItems='center'
-                flexDirection='column'
+                justifyContent={"center"}
+                // flexDirection='column'
                 pt={3}
+                sx={{ width: '100%' }}
             >
 
-                <Stack spacing={2} flexDirection='row' sx={{ width: 700 }}>
+                <Stack spacing={2}  >
                     <Autocomplete
                         freeSolo
                         id="free-solo-2-demo"

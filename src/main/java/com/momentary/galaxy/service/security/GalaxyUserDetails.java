@@ -2,15 +2,21 @@ package com.momentary.galaxy.service.security;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.momentary.galaxy.enity.Permission;
+import com.momentary.galaxy.modal.res.PermissionVo;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.ToString;
 
 @AllArgsConstructor
+@Getter
 @Builder
 @ToString
 public class GalaxyUserDetails implements UserDetails {
@@ -20,6 +26,10 @@ public class GalaxyUserDetails implements UserDetails {
     private String username;
 
     private String password;
+
+    private List<String> menu;
+
+    private List<PermissionVo> permissions;
 
     private Collection<? extends GrantedAuthority> authorities;
 

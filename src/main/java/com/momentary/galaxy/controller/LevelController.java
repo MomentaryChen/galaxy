@@ -23,7 +23,7 @@ import ch.qos.logback.classic.Level;
 @RequestMapping("/api/level")
 public class LevelController {
     @Autowired
-    LevelService levelController;
+    LevelService levelService;
     
     @GetMapping("all")
     @MessageMapping("/levels")
@@ -33,7 +33,7 @@ public class LevelController {
         BaseRs res = new BaseRs();
         res.setCode(HttpRespCode.Common.SUCCESS.getCode());
         res.setMsg(HttpRespCode.Common.SUCCESS.getMsg());
-        res.setData(levelController.getLevels());
+        res.setData(levelService.getLevels());
 
         return ResponseEntity.ok(res);
     }

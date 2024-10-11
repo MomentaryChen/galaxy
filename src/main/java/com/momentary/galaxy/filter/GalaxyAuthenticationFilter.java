@@ -57,12 +57,12 @@ public class GalaxyAuthenticationFilter extends OncePerRequestFilter {
             logger.info("requestUri = {},  servletPath = {}", requestUri, servletPath);
 
             //
-
-            if (request.getHeader(GalaxyConstants.API_HEADER_STRING) != null) {
-                String token = request.getHeader(GalaxyConstants.API_HEADER_STRING);
+            String token = request.getHeader(GalaxyConstants.API_HEADER_STRING);
+            if (!StringUtils.isBlank(token)) {
                 authApiToken(token, request);
                 filterChain.doFilter(request, response);
             } else {
+                logger.info("No Token");
                 filterChain.doFilter(request, response);
                 return;
             }

@@ -4,7 +4,8 @@ import React from 'react';
 export const _userInfo = {
     userId:"",
     userName:"",
-    menu: []
+    menu: [],
+    token: ""
 }
 
 const UserContext = React.createContext();

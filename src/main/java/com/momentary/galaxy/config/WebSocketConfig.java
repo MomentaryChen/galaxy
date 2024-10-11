@@ -10,15 +10,26 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-  @Override
-  public void configureMessageBroker(MessageBrokerRegistry config) {
-    config.enableSimpleBroker("/topic");
-    config.setApplicationDestinationPrefixes("/app");
-  }
+    // private final GalaxyHandshakeInterceptor galaxyHandshakeInterceptor;
+    // private final MyWebSocketHandler webSocketHandler;
 
-  @Override
-  public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4500").withSockJS();
-  }
+    // public WebSocketConfig(GalaxyHandshakeInterceptor galaxyHandshakeInterceptor, MyWebSocketHandler webSocketHandler) {
+    //     this.galaxyHandshakeInterceptor = galaxyHandshakeInterceptor;
+    //     this.webSocketHandler = webSocketHandler;
+    // }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic", "/queue");
+        config.setApplicationDestinationPrefixes("/app");
+        config.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .addInterceptors(new GalaxyHandshakeInterceptor())
+                .setAllowedOrigins("http://localhost:4500").withSockJS();
+    }
 
 }

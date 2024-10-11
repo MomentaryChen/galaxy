@@ -1,16 +1,20 @@
 package com.momentary.galaxy.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.momentary.galaxy.message.HelloMessage;
-import com.momentary.galaxy.modal.Greeting;
+import java.security.Principal;
 
 @EnableScheduling
 @RestController
@@ -27,13 +31,6 @@ public class BamintonController {
         return "baminton";
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
-        System.out.println(message.toString());
-        return new Greeting("Hello, " + message.getName() + "!");
-    }
-
     // @Scheduled(fixedRate = 5000)
     public void autoGreeting() {
         try {
@@ -41,8 +38,15 @@ public class BamintonController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } // simulated delay
-        System.out.println("scheduled");
-        this.template.convertAndSend("/topic/greetings", "Hello");
-        this.template.convertAndSendToUser("admin", "/topic/greetings", "Hello");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 獲取當前用戶的 Principal
+        Object principal = authentication.getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+
+        System.out.println("scheduled: " + username);
+        // this.template.convertAndSend("/topic/greetings", "Hello");
+
+        this.template.convertAndSendToUser(username, "/topic/greetings", "Hello");
     }
 }

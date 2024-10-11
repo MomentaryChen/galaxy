@@ -21,6 +21,8 @@ public class TeamReq extends BaseRq{
     String name;
 
     int teamNumbers;
+
+    int courtCnt;
     
     List<PlayerReq> players;
 }

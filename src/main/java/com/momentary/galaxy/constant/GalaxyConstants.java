@@ -8,7 +8,7 @@ import lombok.ToString;
 public class GalaxyConstants {
 
     // Minutes
-    public static final long EXPIRATION_TIME = 10;
+    public static final long EXPIRATION_TIME = 60 * 24;
 
     // API_HEADER_STRING
     public static final String API_HEADER_STRING = "GALAXY_API_TOKEN";

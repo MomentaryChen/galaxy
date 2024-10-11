@@ -68,6 +68,7 @@ public class SecurityConfig {
                         // Websocket
                         .requestMatchers(HttpMethod.GET, "/ws/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/ws/**").permitAll()
+                        // .requestMatchers(HttpMethod.GET, "/ws/info").permitAll()
                         // System
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/common/**").permitAll()

@@ -53,7 +53,7 @@ export default function BadmintonRegister(props) {
 
     useEffect(() => {
         if (!cookies.badminton_id) {
-            setShowDialog(true);
+            // setShowDialog(true);
         }
     }, []);
 

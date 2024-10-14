@@ -18,7 +18,7 @@ public class LookupServiceImpl implements LookupService {
 
     @Override
     public Lookup insertOrUpdateLookUp(String lookupType, String lookupCode, String LookupDesc,
-            String lookupValue1, String lookupValue2) {
+            String lookupValue1, String lookupValue2, String lookupValue3) {
         Lookup lookup = lookupDao.findByLookupTypeAndLookupCode(lookupType, lookupCode);
 
         if (lookup == null) {
@@ -27,6 +27,7 @@ public class LookupServiceImpl implements LookupService {
 
         lookup.setLookupValue1(lookupValue1);
         lookup.setLookupValue2(lookupValue2);
+        lookup.setLookupValue3(lookupValue3);
 
         return lookupDao.save(lookup);
     }
@@ -40,6 +41,11 @@ public class LookupServiceImpl implements LookupService {
     public List<Lookup> findByWatingList() {
 
         return lookupDao.findByLookupType(GalaxyConstants.TEAM_LOOKUP_TYPE);
+    }
+
+    @Override
+    public Long removeLookUp(String lookupType, String lookupCode) {
+        return lookupDao.deleteByLookupTypeAndLookupCode(lookupType, lookupCode);
     }
 
 }

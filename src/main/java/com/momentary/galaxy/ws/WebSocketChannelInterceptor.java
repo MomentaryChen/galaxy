@@ -10,8 +10,6 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.momentary.galaxy.config.GalaxyHandshakeInterceptor;
@@ -19,7 +17,10 @@ import com.momentary.galaxy.constant.GalaxyConstants;
 import com.momentary.galaxy.service.TokenService;
 import com.momentary.galaxy.service.security.GalaxyUserDetails;
 import com.momentary.galaxy.service.security.GalaxyUserDetailsService;
-import java.security.Principal;
+import com.momentary.galaxy.ws.controller.WsController;
+
+
+import com.sun.security.auth.UserPrincipal;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -28,20 +29,22 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
 
     private static final Logger logger = LogManager.getLogger(GalaxyHandshakeInterceptor.class);
 
-    GalaxyUserDetailsService userDetailsService;
+    @Autowired
+    private GalaxyUserDetailsService userDetailsService;
 
+    @Autowired
     private TokenService tokenService;
 
     @Autowired
-    public WebSocketChannelInterceptor(TokenService tokenService, GalaxyUserDetailsService userDetailsService) {
-        this.tokenService = tokenService; // 注入服务
-        this.userDetailsService = userDetailsService;
-    }
+    private WsController wsController;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+        String sessionId = accessor.getSessionId();
+        
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String token = accessor.getFirstNativeHeader(GalaxyConstants.API_HEADER_STRING);
@@ -57,6 +60,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
                     return null;
                 }
             }
+        } else if(StompCommand.DISCONNECT.equals(accessor.getCommand())) {
+            logger.info("disconnect: " + sessionId);
         }
 
         return message;
@@ -82,6 +87,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             }
 
             accessor.getSessionAttributes().put("clientId", clientId);
+            accessor.setUser(new UserPrincipal(userDetails.getUsername()));
 
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

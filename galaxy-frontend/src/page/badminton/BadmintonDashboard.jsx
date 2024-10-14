@@ -83,10 +83,13 @@ export default function BadmintonDashboard() {
             // }
             // window.console.log(log);
         };
+
+        stomp.current.disconnect = () => {
+            stomp.current.send("/app/exit", JSON.stringify({}), {});
+        }
     };
 
     const connectSockJSCallBack = (frame) => {
-        console.log("CallBack");
         setConnected(true);
 
         stomp.current.subscribe("/topic/greetings", (message) => {
@@ -104,11 +107,11 @@ export default function BadmintonDashboard() {
             setTeams(res.body.data);
         });
 
-        stomp.current.subscribe("/user/topic/waitingPlayers", (message) => {
-            console.error(message);
+        stomp.current.subscribe(`/user/${userContext.userInfo.userName}/topic/waitingPlayers`, (message) => {
             const res = JSON.parse(message.body);
-            setWaitingPalyers(res.body.data);
-            console.log(res)
+            console.log(res.data);
+            setWaitingPalyers(res.data.players);
+            
         });
     };
 

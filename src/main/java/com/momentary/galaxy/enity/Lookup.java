@@ -64,6 +64,9 @@ public class Lookup {
     @Column
     String lookupValue2;
 
+    @Column
+    String lookupValue3;
+
     @CreatedDate
     @Column(updatable = false, nullable = false)
     @Builder.Default

@@ -13,4 +13,6 @@ public interface LookupDao extends JpaRepository<Lookup, Long> {
     Lookup findByLookupTypeAndLookupCode(String lookupType, String lookupCode);
 
     List<Lookup> findByLookupType(String lookupType);
+
+    Long deleteByLookupTypeAndLookupCode(String lookupType, String lookupCode);
 }

@@ -32,22 +32,23 @@ const SecondaryActionButton = styled(Button)(({ theme }) => ({
 }));
 
 const GalaxyDialog = ({
-    showDialog,
+    showDialog = true,
     setShowDialog,
-    title,
-    message,
-    actionLabel,
+    title = "Demo",
+    message = "This is a demo page",
+    actionLabel = "OK",
     actionHandler,
-    secondaryActionLabel,
+    secondaryActionLabel = "Cancel",
     secondaryActionHandler,
     closeHandler,
 }) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
+    const [_showDiallog, _setShowDiallog] = React.useState(showDialog);
 
     const handleClose = () => {
-        // setShowDialog(false);
-        // if (closeHandler) closeHandler();
+        if (closeHandler) closeHandler();
+        else _setShowDiallog(false);
     };
 
     return (
@@ -55,7 +56,7 @@ const GalaxyDialog = ({
             <Dialog
                 // fullScreen={fullScreen}
                 fullWidth
-                open={showDialog}
+                open={_showDiallog}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"

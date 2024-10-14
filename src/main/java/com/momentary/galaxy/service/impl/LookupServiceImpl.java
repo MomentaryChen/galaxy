@@ -3,9 +3,12 @@ package com.momentary.galaxy.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.momentary.galaxy.constant.GalaxyConstants;
 import com.momentary.galaxy.dao.LookupDao;
 import com.momentary.galaxy.enity.Lookup;
 import com.momentary.galaxy.service.LookupService;
+
+import java.util.List;
 
 @Service
 public class LookupServiceImpl implements LookupService {
@@ -26,6 +29,17 @@ public class LookupServiceImpl implements LookupService {
         lookup.setLookupValue2(lookupValue2);
 
         return lookupDao.save(lookup);
+    }
+
+    @Override
+    public List<Lookup> findAll() {
+        return lookupDao.findAll();
+    }
+
+    @Override
+    public List<Lookup> findByWatingList() {
+
+        return lookupDao.findByLookupType(GalaxyConstants.TEAM_LOOKUP_TYPE);
     }
 
 }

@@ -43,53 +43,7 @@ public class GalaxyHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
             WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
 
-        String token = request.getHeaders().getFirst(GalaxyConstants.API_HEADER_STRING);
-        String auth = request.getHeaders().getFirst("Authorization");
-
-        HttpHeaders headers = request.getHeaders();
-        headers.forEach((key, value) -> {
-            System.out.println("key = " + key);
-            System.out.println("value = " + value);
-        });
-
-        System.out.println("beforeHandshake Token: " + token);
-        System.out.println("beforeHandshake Auth: " + auth);
-
-
         return true;
-    }
-
-    private void authApiToken(String token, HttpServletRequest request) throws Exception {
-        try {
-            // 1. check token
-            if (StringUtils.isBlank(token)) {
-                throw new Exception("Token is null");
-            }
-            logger.info("Pass: check token");
-
-            // 2. check token is valid or not
-            tokenService.validateToken(token);
-            logger.info("Pass: Check token is valid or not ");
-
-            // 3. check client id
-            String clientId = tokenService.getClientId(token);
-            GalaxyUserDetails userDetails = userDetailsService.loadUserByClientId(clientId);
-            if (userDetails == null) {
-                throw new Exception("User not found");
-            }
-            logger.info("Pass: check client id ");
-            logger.info(userDetails);
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
-            throw e;
-        }
-
     }
 
     @Override

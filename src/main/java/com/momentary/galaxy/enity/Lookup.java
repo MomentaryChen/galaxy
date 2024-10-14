@@ -37,6 +37,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "lookup")
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder

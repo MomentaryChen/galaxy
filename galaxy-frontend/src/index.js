@@ -43,10 +43,20 @@ const router = createBrowserRouter([
                         errorElement: <ErrorPage />,
                     },
                     {
+                        path: page.function.children.DND.path,
+                        element: <DND />,
+                        errorElement: <ErrorPage />,
+                    },
+                    {
+                        path: page.function.children.dialog.path,
+                        element: <GalaxyDialog />,
+                        errorElement: <ErrorPage />,
+                    },
+                    {
                         path: page.function.children.autoComplete.path,
                         element: <CosAutoComplete />,
                         errorElement: <ErrorPage />,
-                    }
+                    },
                 ],
             },
 

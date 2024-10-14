@@ -70,8 +70,8 @@ export default function BadmintonDashboard() {
         stomp.current = Stomp.over(socket);
         stomp.current.connect(
             {
-                'GALAXY_API_TOKEN': userContext.userToken,
-                'Authorization': `Bearer ${userContext.userToken}`,
+                GALAXY_API_TOKEN: userContext.userToken,
+                Authorization: `Bearer ${userContext.userToken}`,
             },
             connectSockJSCallBack,
             connectSockJSErrorCallback
@@ -104,9 +104,11 @@ export default function BadmintonDashboard() {
             setTeams(res.body.data);
         });
 
-        stomp.current.subscribe("/topic/waitingPlaers", (message) => {
+        stomp.current.subscribe("/user/topic/waitingPlayers", (message) => {
+            console.error(message);
             const res = JSON.parse(message.body);
             setWaitingPalyers(res.body.data);
+            console.log(res)
         });
     };
 
@@ -138,10 +140,11 @@ export default function BadmintonDashboard() {
         }
     }, [connected]);
 
+    const refresh = () => {
+        stomp.current.send("/app/teams", JSON.stringify({}), {});
+    };
+
     const [testref, settestref] = useState(0);
-    useEffect(() => {
-        console.log("SURE");
-    }, [testref]);
 
     const [court, setCourt] = useState([null, null, null, null]);
     const [waitingPalyers, setWaitingPalyers] = useState([]);
@@ -189,7 +192,7 @@ export default function BadmintonDashboard() {
 
     return (
         <React.Fragment>
-            {!selectedTeams && teams && (
+            {teams && (
                 <>
                     <>
                         <Select
@@ -203,7 +206,7 @@ export default function BadmintonDashboard() {
                                 stomp.current.send(
                                     "/app/selectedTeam",
                                     JSON.stringify({
-                                        selectedTeam: e.target.value.id,
+                                        teamId: e.target.value.id,
                                     }),
                                     {
                                         GALAXY_API_TOKEN: userContext.userToken,
@@ -217,6 +220,7 @@ export default function BadmintonDashboard() {
                                 </MenuItem>
                             ))}
                         </Select>
+                        <Button onClick={refresh}>Refresh</Button>
                     </>
                 </>
             )}
